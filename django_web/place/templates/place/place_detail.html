@@ -1,0 +1,209 @@
+{% extends 'place_base/base.html' %}
+{% load static %}
+{% block main_area %}
+
+<!--=================================
+=            Single Blog            =
+==================================-->
+
+<section class="blog single-blog section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10">
+				<article class="single-post">
+					<h1 style="margin-bottom: 1rem;">{{ place.store_name }}</h1>
+
+					<table class="table border-info">
+						<tr>
+							<th rowspan="2">주소</th>
+							<td>{{place.store_road_address}}</td>
+						</tr>
+						<tr>
+							<td><i class="fa fa-building"></i>&nbsp;{{ place.store_address}}</td>
+						</tr>
+						{% if place.store_tel != "" %}
+						<tr>
+							<th>전화번호</th>
+							<td>{{ place.store_tel }}</td>
+						</tr>
+						
+						{% endif %}
+						{% if place.store_comfortables != "" %}
+						<tr>
+							<th>편의사항</th>
+							<td>{{ place.store_comfortables}}</td>
+						</tr>
+						{% endif %}
+						{% if place.store_link != "" %}
+						<tr>
+							<th>웹사이트</th>
+							<td><a href="{{place.store_link}}">식당 홈페이지</a></td>
+						</tr>
+						{% endif %}
+					</table>
+					<table class="table border-info">
+						
+						<tr>
+							<th>영업시간</th>
+							<td colspan="2">
+								<table class="table border-info">
+									{% for i in btime %}
+									<tr>
+										<td>
+											{{i.day}}
+										</td>
+										<td>{{i.time}}</td>
+										<td colspan="2">{{i.break_time}} / {{i.last_order}}</td>
+									</tr>
+									{% endfor %}
+								</table>
+							</td>
+						</tr>
+					</table>
+
+					<p>
+						<a class="btn btn-info" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+						  메뉴보기
+						</a>
+					  </p>
+					  <div class="collapse" id="collapseExample">
+						<div class="card card-body">
+							<table class="table">
+								<tr>
+									<th>메뉴</th>
+									<td colspan="2">
+										<table class="table">
+											{% for i in menu %}
+											<tr>
+												<td rowspan="2">
+													{% if i.menu_img != "" %}
+													<img src="/media/{{i.menu_img }}" style="width:100px; height:100px; margin-bottom:1px;">
+													{% else %}
+													<img src="{% static 'place/images/default-food-image.jpeg' %}" style="width:100px; height:100px; margin-bottom:1px;">
+													{% endif %}
+												</td>
+												<th>{{i.menu_name}}</th>
+												<td colspan="2">₩ {{i.menu_price}}</td>
+											</tr>
+											<tr>
+												<td colspan="3">{{i.menu_description}}</td>
+											</tr>
+											{% endfor %}
+										</table>
+									</td>
+								</tr>
+							</table>
+						</div>
+					  </div>
+
+
+				
+					<br>
+					<p style="font-weight: 500; color: #000000; font-size: 1rem">{{ place.store_description}}</p>
+					<hr>
+					<div id="map">
+						{{map|safe}}
+					</div>
+					<div id="map">
+						{{map|safe}}
+					</div>
+				</article>
+				{% if user.is_authenticated %}
+				
+				<div class="block comment">
+					<a href="{% url 'users:review-create' %}">
+						<button type="submit" class="btn btn-transparent" name="store_id" value="{{place.id}}">리뷰를 남겨주세요</button>
+					</a>
+				</div>
+	
+				{% else %}
+				<div class="block comment">
+					<a href="{% url 'account_signup' %}" style="margin-right:20px;"><button class="btn btn-transparent">회원가입</button></a>
+					<a href="{% url 'account_login' %}"><button class="btn btn-transparent">로그인</button></a>
+				</div>
+				{% endif %}
+				
+
+				<main class="site-body">
+					<div class="content-list max-content-width">
+					  <div class="header">
+						<h2>리뷰 목록</h2>
+					  </div>
+					  <div class="contents">
+						{% for review in page_obj.object_list %}
+						  <a href="{% url 'users:review-detail' review.id %}">
+							<section class="cp-card content">
+							  {% if review.image1 != ""%}
+							  <div class="thumb" style="background-image: url('{{ review.image1 }}');"></div>
+							  {% else %}
+							  <div class="thumb" style="background-image: 'images/no-image-icon.png';"></div>
+							  {% endif %}
+							  <div class="body">
+								<span class="cp-chip green">{{ review.restaurant_name }}</span>
+								{% if review.title %}
+								<h2 class="title">{{ review.title }}</h2>
+								{% else %}
+								<h2>{{ review.title }}</h2>
+								{% endif %}
+								<date class="date">{{ review.dt_created|date:"Y년 n월 j일" }}</date>
+								<div class="metadata">
+								  <div class="review-rating">
+									<span class="cp-stars">
+									  {% if review.rating %}
+									  {% for i in ""|ljust:review.rating %}★{% endfor %}
+									  {% endif %}
+									</span>
+								  </div>
+								  <div class="author">
+									<div class="cp-avatar" style="background-image: url('{{ review.author.profile_pic.url }}')"></div>
+									<span>{{ review.author.nickname }}</span>
+								  </div>
+								</div>
+							  </div>
+							</section>
+						  </a>
+						{% empty %}
+						  <p class="empty">아직 리뷰가 없어요 :(</p>
+						{% endfor %}
+					  </div>    
+
+
+		
+					  {% if page_obj %}
+					  <ul class="pagination">
+						{% if page_obj.has_previous %}
+						  <li><a href="?page=1">처음</a></li>
+						  <li><a href="?page={{ page_obj.previous_page_number }}">이전</a></li>
+						{% endif %}
+						{% for num in page_obj.paginator.page_range %}
+						  {% if page_obj.number == num %}
+							<li class="current btn-info">{{ num }}</li>
+						  {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+							<li><a href="?page={{ num }}">{{ num }}</a></li>
+						  {% endif %}
+						{% endfor %}
+						{% if page_obj.has_next %}
+						  <li><a href="?page={{ page_obj.next_page_number }}">다음</a></li>
+						  <li><a href="?page={{ page_obj.paginator.num_pages }}">마지막</a></li>
+						{% endif %}
+					  </ul>    
+					{% endif %}
+					</div>
+				  </main>
+
+
+
+
+			
+				</div>
+			</div>
+
+			<!-- 여기를 고쳐서 지도를 넣자. -->
+			<!-- <div id="map">
+				{{map|safe}}
+			</div> -->
+
+		</div>
+	</div>
+</section>
+{% endblock %}

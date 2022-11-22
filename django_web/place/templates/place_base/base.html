@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+<html lang="ko">
+<head>
+  <!-- ** Basic Page Needs ** -->
+  <meta charset="utf-8">
+  <title>야미</title>
+  <!-- ** Mobile Specific Metas ** -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Agency HTML Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="Themefisher">
+  <meta name="generator" content="Themefisher Classified Marketplace Template v1.0">
+  
+  <!-- theme meta -->
+  <meta name="theme-name" content="classimax" />
+
+  <!-- favicon -->
+  <link href="{% static 'place/images/tasty.png' %}" rel="shortcut icon">
+
+  <!-- 
+  Essential stylesheets
+  =====================================-->
+  <link href="{% static 'place/plugin/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'place/plugin/bootstrap/bootstrap-slider.css' %}" rel="stylesheet">
+  <link href="{% static 'place/plugin/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'place/plugin/slick/slick.css' %}" rel="stylesheet">
+  <link href="{% static 'place/plugin/slick/slick-theme.css' %}" rel="stylesheet">
+  <link href="{% static 'place/plugin/jquery-nice-select/css/nice-select.css' %}" rel="stylesheet">
+  
+  <link href="{% static 'place/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'place/css/style2.css' %}" rel="stylesheet">
+  <link href="{% static 'place/css/theme.css' %}" rel="stylesheet">
+
+    <!-- 커스텀 스타일 -->
+    <style>
+        .card img {
+            height: 20rem;
+        }
+        .bg-1 {
+            background: url("{% static 'place/images/home/food.gif' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+</head>
+
+<body class="body-wrapper">
+
+
+<header>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+                {% include 'place_base/navbar.html' %}
+			</div>
+		</div>
+	</div>
+</header>
+
+{% block main_area %}
+{% endblock %}
+
+
+
+<!-- Footer Bottom -->
+{% include 'place_base/footer.html' %}
+
+<!-- 
+Essential Scripts
+=====================================-->
+<script src="{% static 'place/plugin/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'place/plugin/bootstrap/popper.min.js' %}"></script>
+<script src="{% static 'place/plugin/bootstrap/bootstrap.min.js' %}"></script>
+<script src="{% static 'place/plugin/bootstrap/bootstrap-slider.js' %}"></script>
+<script src="{% static 'place/plugin/tether/js/tether.min.js' %}"></script>
+<script src="{% static 'place/plugin/raty/jquery.raty-fa.js' %}"></script>
+<script src="{% static 'place/plugin/slick/slick.min.js' %}"></script>
+<script src="{% static 'place/plugin/jquery-nice-select/js/jquery.nice-select.min.js' %}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU" defer></script>
+<script src="{% static 'place/plugin/google-map/map.js' %}" defer></script>
+
+<script src="{% static 'place/js/script.js' %}"></script>
+
+</body>
+
+</html>
+
+
+

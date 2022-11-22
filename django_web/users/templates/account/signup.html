@@ -1,0 +1,40 @@
+{% extends "place_base/base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block main_area %}
+<section class="login py-5 border-top-1">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-8 align-item-center">
+        <div class="border border">
+          <h3 class="bg-gray p-4">회원가입</h3>
+          <form method="post">
+            {% csrf_token %}
+            <fieldset class="p-4">
+              {{ form.email|add_class:"form-control mb-3"|attr:"placeholder:이메일"|add_error_class:"error" }}
+              {% for error in form.email.errors %}
+                <div class="error-message">{{ error }}</div>
+              {% endfor %}
+              {{ form.password1|add_class:"form-control mb-3"|attr:"placeholder:비밀번호"|add_error_class:"error" }}
+              {% for error in form.password1.errors %}
+                <div class="error-message">{{ error }}</div>
+              {% endfor %}
+              {{ form.password2|add_class:"form-control mb-3"|attr:"placeholder:비밀번호 확인"|add_error_class:"error" }}
+              {% for error in form.password2.errors %}
+                <div class="error-message">{{ error }}</div>
+              {% endfor %}
+              <button type="submit" class="btn btn-primary font-weight-bold mt-3 cp-button">회원가입</button>
+              <div class="info" style="margin-top:10px;">
+                이미 회원이신가요? <a class="link" href="{% url 'account_login' %}">로그인</a>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock main_area %}

@@ -1,0 +1,39 @@
+{% extends "place_base/base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block main_area %}
+<section class="login py-5 border-top-1">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-5 col-md-8 align-item-center">
+        <div class="border">
+          <h3 class="bg-gray p-4">로그인</h3>
+          <form method="post">
+            {% csrf_token %}
+            <fieldset class="p-4">
+              {% for error in form.non_field_errors %}
+                <div class="form-error error-message">{{ error }}</div>
+              {% endfor %}
+              {{ form.login|add_class:"form-control mb-3"|attr:"placeholder:이메일"|add_error_class:"error"}}
+              {% for error in form.login.errors %}
+                <div class="form-error error-message">{{ error }}</div>
+              {% endfor %}
+              
+
+              {{ form.password|add_class:"form-control mb-3"|attr:"placeholder:비밀번호"|add_error_class:"error"}}
+              {% for error in form.password.errors %}
+                <div class="form-error error-message">{{ error }}</div>
+              {% endfor %}
+              <button type="submit" class="btn btn-primary font-weight-bold mt-3 cp-button">로그인</button>
+              <a class="mt-3 d-block text-primary" href="{% url 'account_reset_password' %}">비밀번호 찾기</a>
+              <a class="mt-3 d-inline-block text-primary" href="{% url 'account_signup' %}">회원가입</a>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock main_area %}

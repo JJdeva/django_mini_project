@@ -1,0 +1,181 @@
+{% extends 'place_base/base.html' %}
+{% block main_area %}
+
+<style>
+	.form-control > ul {
+		height: 25rem;
+		overflow-y: auto !important;
+	}
+</style>
+
+<!--===============================
+=            Hero Area            =
+================================-->
+<section class="hero-area bg-1 text-center overly">
+	<!-- Container Start -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Header Contetnt -->
+				<div class="content-block">
+					<h1>야미</h1>
+					<p>오늘 뭐먹지 고민하지말고 찾아보세요</p>
+					<!-- <div class="short-popular-category-list text-center">
+						<h2>Popular Category</h2>
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<a href="category.html"><i class="fa fa-bed"></i> Hotel</a></li>
+							<li class="list-inline-item">
+								<a href="category.html"><i class="fa fa-grav"></i> Fitness</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="category.html"><i class="fa fa-car"></i> Cars</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="category.html"><i class="fa fa-cutlery"></i> Restaurants</a>
+							</li>
+							<li class="list-inline-item">
+								<a href="category.html"><i class="fa fa-coffee"></i> Cafe</a>
+							</li>
+						</ul>
+					</div> -->
+
+				</div>
+				<!-- Advance Search -->
+				<div class="advance-search">
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-lg-12 col-md-12 align-content-center">
+								<form method="get" class="form" action="{% url 'place:search-list' %}">
+									<div class="form-row">
+                                        <div class="form-group col-lg-5 col-md-6">
+											<select class="w-100 form-control mt-lg-1 mt-md-2" name="category" aria-placeholder="카레고리" style="height:10px;">
+												<option selected disabled>카테고리</option>
+												{% for i in categories %}
+												<option value="{{i.main_category}}">{{ i.main_category }}</option>
+												{% endfor %}
+											</select>
+										</div>
+	
+                                        <div class="form-group col-lg-5 col-md-6">
+											<select class="w-100 form-control mt-lg-1 mt-md-2" id="mysel" size="5" name="region" aria-placeholder="지역">
+
+												<option selected disabled>지역</option>
+										
+												{% for i in local %}
+										
+												<option class="asd" value="{{i.local}}">{{i.local}}</option>
+										
+												{% endfor %}
+									
+											</select>
+										</div>
+										<div class="form-group col-xl-2 col-lg-3 col-md-6 align-self-center">
+											<button type="submit" class="btn btn-primary active w-100">검색</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 필드 오류와 넌필드 오류를 출력한다. -->
+
+
+
+	<!-- Container End -->
+</section>
+<!-- <script>
+	$(document).ready(function() {
+		$( "select[name=region]" ).val( "{{ region_text }}" );
+		$('select[name=region]').change(function () {
+		console.log($('select[name=region]').val());
+		region = $('select[name=region]').val();
+		$('.form').submit();
+	});
+	});
+	</script> -->
+
+<!--===========================================
+=            Popular deals section            =
+============================================-->
+<section class="popular-deals section bg-gray">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="section-title">
+					<h2>핫플레이스</h2>
+					<p>뜨고 있는 맛집들</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="trending-ads-slide">
+					{% for i in main %}
+					<div class="col-sm-12 col-lg-4">
+						<!-- product card -->
+						<div class="product-item bg-light">
+							<div class="card">
+								<div class="thumb-content">
+									<a href="{% url 'place:place-detail' i.id %}">
+									<img class="card-img-top img-fluid" src="/media/{{i.store_thumbnail}}" alt="Card image cap">
+									</a>
+								</div>
+								<div class="card-body">
+									<h4 class="card-title"><a href="{% url 'place:place-detail' i.id %}">{{ i.store_name }}</a></h4>
+									<ul class="list-inline product-meta">
+										<li class="list-inline-item">
+											<a href="single.html"><i class="fa fa-check"></i>준비중</a>
+										</li>
+										<li class="list-inline-item">
+											<a href="category.html"><i class="fa fa-check"></i>준비중</a>
+										</li>
+									</ul>
+									{% if i.store_summary != '' %}
+										<p class="card-text">{{ i.store_summary }}</p>
+									{% else %}
+									<p class="card-text">설명 준비중</p>
+									{% endif %}
+									<div class="product-ratings">
+										<ul class="list-inline">
+											{% for j in star %}
+												{% if j.name == i.id %}
+													{% for k in j.star %}
+														{% if k == 0 %}
+															<li class="list-inline-item"><i class="fa fa-star"></i></li>
+														{% endif %}
+														{% if k == 1 %}
+															<li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+														{% endif %}
+														{% if k == 2 %}
+															<li class="list-inline-item selected"><i class="fa fa-star-half"></i></li>
+														{% endif %}
+													{% endfor %}
+												{% endif %}
+											{% endfor %}
+											{% if i.res_stars != None %}
+												<li class="list-inline-item selected">{{i.res_stars}}</li>
+											{% endif %}
+										
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+{% endblock %}

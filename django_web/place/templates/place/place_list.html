@@ -1,0 +1,193 @@
+{% extends 'place_base/base.html' %}
+{% load static %}
+{% block main_area %}
+
+<style>
+	.form-control > ul {
+		height: 25rem;
+		overflow-y: auto !important;
+	}
+</style>
+
+<section class="page-search">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<!-- Advance Search -->
+				<div class="advance-search nice-select-white">
+					<form method="get" class="form" action="{% url 'place:search-list' %}">
+						<div class="form-row align-items-center">
+							<div class="form-group col-lg-5 col-md-6">
+                                <select class="w-100 form-control mt-lg-1 mt-md-2" name='category' aria-placeholder="카레고리">
+                                    <option selected disabled>카테고리</option>
+									{% for i in categories %}
+                                    <option value="{{i.main_category}}">{{i.main_category}}</option>
+									{% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-5 col-md-6">
+                                <select class="w-100 form-control mt-lg-1 mt-md-2" name="region" aria-placeholder="지역">
+                                    <option selected disabled>지역</option>
+									{% for i in local %}
+                                    <option value="{{i.local}}">{{i.local}}</option>
+									{% endfor %}
+                                </select>
+                            </div>
+							<div class="form-group col-xl-2 col-lg-3 col-md-6 align-self-center">
+								<button type="submit" class="btn btn-primary active w-100">검색</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="section-sm">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="search-result bg-gray">
+					{% if keyword.category == None and keyword.region == None %}
+					<h2>검색결과 "전체결과"</h2>
+					<p>총 {{ keyword.place_count }}건 - {{ now }}</p>
+					{% elif keyword.category != None and keyword.region != None %}
+					<h2>검색결과 "{{keyword.category}} {{keyword.region}}"</h2>
+					<p>총 {{ keyword.place_count }}건 - {{ now }}</p>
+					{% elif keyword.category != None and keyword.region == None %}
+					<h2>검색결과 "{{keyword.category}}"</h2>
+					<p>총 {{ keyword.place_count }}건 - {{ now }}</p>
+					{% elif keyword.category == None and keyword.region != None %}
+					<h2>검색결과 "{{keyword.region}}"</h2>
+					<p>총 {{ keyword.place_count }}건 - {{ now }}</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3 col-md-4">
+				<div class="category-sidebar">
+					<div class="widget category-list">
+						<h4 class="widget-header">모든 카테고리</h4>
+						<ul class="category-list">
+							{% for j in categories %}
+							<li><a href="{% url 'place:search-list' %}?category={{j.main_category}}">{{j.main_category}} <span>{{j.max_count}}</span></a></li>
+							{% endfor %}
+						</ul>
+					</div>
+
+					<div class="widget category-list">
+						<h4 class="widget-header">지역</h4>
+						<ul class="category-list">
+							{% for i in local %}
+							<li><a href="{% url 'place:search-list' %}?region={{i.local}}">{{i.local}} <span>{{i.count}}</span></a></li>
+							{% endfor %}
+						</ul>
+					</div>
+					<div id="map">
+						{{map|safe}}
+					</div>
+		
+					<div id="map">
+						{{map|safe}}
+					</div>
+
+				</div>
+			</div>
+
+
+
+
+			<div class="col-lg-9 col-md-8">
+				
+{% for place in page_obj.object_list %}
+<!-- ad listing list  -->
+<div class="ad-listing-list mt-20">
+    <div class="row p-lg-3 p-sm-5 p-4">
+        <div class="col-lg-4 align-self-center">
+            <a href="{% url 'place:place-detail' place.id %}">
+                {% if place.store_thumbnail != None %}
+                <img src="{{ place.store_thumbnail.url }}" class="img-fluid" alt="" style="width:220px; height:220px;">
+                {% else %}
+                <img src="#" class="img-fluid" alt="">
+                {% endif %}
+            </a>
+        </div>
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-lg-6 col-md-10">
+                    <div class="ad-listing-content">
+                        <div>
+                            <a href="{% url 'place:place-detail' place.id %}" class="font-weight-bold">{{ place.store_name }}</a>
+                        </div>
+                        <ul class="list-inline mt-2 mb-3">
+							{% for k in category %}
+							{% if k.categories == place.id %}
+                            <li class="list-inline-item"><a href="{% url 'place:search-list' %}?category={{k.main_category}}"> <i class="fa fa-folder-open-o"></i> {{ k.main_category }}</a></li>
+							{% endif %}
+							{% endfor %}
+                            <!-- <li class="list-inline-item"><a href="category.htm"><i class="fa fa-calendar"></i>26th December</a></li> -->
+                        </ul>
+                        <p class="pr-6">{{ place.store_summary|truncatechars:20 }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-5 align-self-center">
+                    <div class="product-ratings float-lg-right pb-3">
+                        <ul class="list-inline">
+                            {% for j in star %}
+                            {% if j.name == place.id %}
+                                {% for k in j.star %}
+                                    {% if k == 0 %}
+                                        <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                    {% endif %}
+                                    {% if k == 1 %}
+                                        <li class="list-inline-item selected"><i class="fa fa-star"></i></li>
+                                    {% endif %}
+                                    {% if k == 2 %}
+                                        <li class="list-inline-item selected"><i class="fa fa-star-half"></i></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+				
+				<!-- ad listing list  -->
+	
+				<!-- pagination -->
+				<main class="site-body">
+					<div class="content-list max-content-width">
+					
+				{% if page_obj %}
+					  <ul class="pagination">
+						{% if page_obj.has_previous %}
+						  <li><a href="{{request.get_full_path}}&page=1">처음</a></li>
+						  <li><a href="{{request.get_full_path}}&page={{ page_obj.previous_page_number }}">이전</a></li>
+						{% endif %}
+						{% for num in page_obj.paginator.page_range %}
+						  {% if page_obj.number == num %}
+							<li class="current btn-info">{{ num }}</li>
+						  {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+							<li><a href="{{request.get_full_path}}&page={{ num }}">{{ num }}</a></li>
+						  {% endif %}
+						{% endfor %}
+						{% if page_obj.has_next %}
+						  <li><a href="{{request.get_full_path}}&page={{ page_obj.next_page_number }}">다음</a></li>
+						  <li><a href="{{request.get_full_path}}&page={{ page_obj.paginator.num_pages }}">마지막</a></li>
+						{% endif %}
+					  </ul>    
+					{% endif %}
+				</div>
+			</main>
+				<!-- pagination -->
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock main_area %}

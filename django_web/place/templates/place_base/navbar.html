@@ -1,0 +1,62 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light navigation">
+    <a class="navbar-brand" href="{% url 'place:index' %}">
+        <img style="height:70px; width:130px;" src="{% static 'place/images/logos.jpg' %}" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto main-nav ">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'place:index' %}">홈</a>
+            </li>
+            <li class="nav-item dropdown dropdown-slide @@dashboard">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#!">카테고리<span><i class="fa fa-angle-down"></i></span>
+                </a>
+                <!-- Dropdown list -->
+                <ul class="dropdown-menu" style="overflow-y: scroll; height:20rem;">
+                    {% for i in categories %}
+                    <li><a class="dropdown-item @@dashboardPage" href="{% url 'place:search-list' %}?category={{i.main_category}}">{{ i.main_category }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li class="nav-item dropdown dropdown-slide @@pages">
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    지역 <span><i class="fa fa-angle-down"></i></span>
+                </a>
+                <!-- Dropdown list -->
+                <ul class="dropdown-menu" style="overflow-y: scroll; height:20rem;">
+                    {% for i in local %}
+                    <li><a class="dropdown-item @@about" size="5" href="{% url 'place:search-list' %}?region={{i.local}}">{{i.local}}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+        </ul>
+        <ul class="navbar-nav ml-auto mt-10">
+            {% if user.is_authenticated %}
+            {% if user.is_staff %}
+            <li class="nav-item">
+                <a class="nav-link login-button" href="{% url 'admin:index' %}">관리자</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link login-button" href="{% url 'users:profile' user.id %}">내 프로필</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link login-button" href="{% url 'account_logout' %}">로그아웃</a>
+            </li>
+
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link login-button" href="{% url 'account_login' %}">로그인</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link login-button" href="{% url 'account_signup' %}">회원가입</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
